@@ -20,14 +20,12 @@ public class Main {
         hashTable.delete("John", "Doe");
 
         hashTable.insert("Test", "Case", "555-235-1121", "Test_Case@testcase.com");
-        hashTable.insert("Nadezhda", "Kanachekhovskaya", "555-235-1122", "dr.nadezhda.kanacheckovskaya@somehospital.moscow.ci.ru");
         hashTable.insert("Jo", "Wu", "555-235-1123", "wu@h.com");
         hashTable.insert("Millard", "Fillmore", "555-235-1124", "millard@theactualwhitehouse.us");
         hashTable.insert("Bob", "vanDyke", "555-235-1125", "vandyke@nodomain.com");
         hashTable.insert("Upside", "Down", "555-235-1126", "upsidedown@rightsideup.com");
 
         hashTable.lookup("Jack", "Jones");
-        hashTable.lookup("Nadezhda", "Kanachekhovskaya");
 
         hashTable.delete("Jill", "Jones");
         hashTable.delete("John", "Doe");

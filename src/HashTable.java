@@ -2,7 +2,6 @@ public class HashTable {
 
     private static final int DEFAULT_SIZE = 13;
 
-    //ADD FUNCTIONS -- existing methods too long
     private HashEntry[] phoneBook  = new HashEntry[DEFAULT_SIZE];
 
     public HashTable() {
@@ -28,30 +27,37 @@ public class HashTable {
 
         if (phoneBook[hashIndex] == null) {
             phoneBook[hashIndex] = new HashEntry(key, value);
-            System.out.println("Entry for " + key + " created");
+            System.out.println("Entry for " + key + " created at index " + hashIndex);
         } else {
-            HashEntry currentEntry = phoneBook[hashIndex];
-
-            while (currentEntry.getNext() != null && currentEntry.getKey() != key) {
-                currentEntry = currentEntry.getNext();
-            }
+            HashEntry currentEntry = traverseChainOfEntries(phoneBook[hashIndex], key);
 
             if (currentEntry.getKey().equals(key)) {
                 currentEntry.setValue(value);
-                System.out.println("Entry updated!");
+                System.out.println("Entry for " + key + " updated at index " + hashIndex);
             } else {
                 currentEntry.setNext(new HashEntry(key, value));
-                System.out.println("Entry for " + key + " created");
+                System.out.println("Entry for " + key + " created at index " + hashIndex);
             }
         }
+    }
+
+    private HashEntry traverseChainOfEntries(HashEntry currentEntry, String key) {
+        if (currentEntry != null) {
+            while (currentEntry.getNext() != null && !currentEntry.getKey().equals(key)) {
+                currentEntry = currentEntry.getNext();
+            }
+        }
+
+        return currentEntry;
     }
 
     public void delete(String firstName, String lastName) {
         int hashIndex = hashName(firstName, lastName);
         String key = firstName + " " + lastName;
-        System.out.println("Trying to delete " + key + " from index " + hashIndex + "...");
 
-        if (phoneBook[hashIndex] != null) {
+        if (phoneBook[hashIndex] == null) {
+            System.out.println("Cannot delete " + key + " at index " + hashIndex);
+        } else {
             HashEntry currentEntry = phoneBook[hashIndex];
             HashEntry previousEntry = null;
 
@@ -60,19 +66,13 @@ public class HashTable {
                 currentEntry = currentEntry.getNext();
             }
 
-            if (currentEntry.getKey().equals(key)) {
-                if (previousEntry == null) {
-                    phoneBook[hashIndex] = currentEntry.getNext();
-                }
-                else {
-                    previousEntry.setNext(currentEntry.getNext());
-                }
+            if (previousEntry == null) {
+                phoneBook[hashIndex] = currentEntry.getNext();
+            } else {
+                previousEntry.setNext(currentEntry.getNext());
             }
 
-            System.out.println("Successfully deleted entry for " + key);
-
-        } else {
-            System.out.println("Cannot delete: no such entry at index " + hashIndex);
+            System.out.println("Successfully deleted entry for " + key + " at index " + hashIndex);
         }
     }
 
@@ -80,28 +80,18 @@ public class HashTable {
         int hashIndex = hashName(firstName, lastName);
         String key = firstName + " " + lastName;
 
-        System.out.println("Trying to look up " + key + " at index " + hashIndex + " ...");
+        HashEntry currentEntry = traverseChainOfEntries(phoneBook[hashIndex], key);
 
-        if (phoneBook[hashIndex] == null)
-            System.out.println("Cannot look up: no such entry at index " + hashIndex);
-        else {
-            HashEntry currentEntry = phoneBook[hashIndex];
-
-            while (currentEntry != null && !currentEntry.getKey().equals(key)) {
-                System.out.println("Found entry for " + currentEntry.getKey());
-                currentEntry = currentEntry.getNext();
-                System.out.println("Trying next link in the chain... ");
-            }
-
-            if (currentEntry == null)
-                System.out.println("Entry not found in this chain.");
-            else
-                System.out.println("Found correct entry: " + currentEntry.getKey() + " " + currentEntry.getValue());
+        if (currentEntry != null && currentEntry.getKey().equals(key)) {
+            System.out.println("Found " + currentEntry);
+        } else {
+            System.out.println("Cannot find " + key + " at index " + hashIndex);
         }
     }
 
     public void printTable() {
         StringBuilder sb = new StringBuilder("Table snapshot: ");
+        sb.append(System.getProperty("line.separator"));
 
         for (int i = 0; i < 13; i++) {
             appendChainOfEntries(sb, i);
