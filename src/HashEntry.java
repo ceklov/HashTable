@@ -26,10 +26,6 @@ public class HashEntry {
         this.value = value;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public void setNext(HashEntry next) {
         this.next = next;
     }
