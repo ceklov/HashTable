@@ -1,5 +1,3 @@
-package com.eklov;
-
 public class HashEntry {
 
     private String key;

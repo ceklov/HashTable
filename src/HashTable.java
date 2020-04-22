@@ -1,5 +1,3 @@
-package com.eklov;
-
 public class HashTable {
 
     private static final int DEFAULT_SIZE = 13;
